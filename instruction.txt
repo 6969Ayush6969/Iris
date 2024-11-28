@@ -1,0 +1,34 @@
+***For first run***
+1.copy and paste in terminal 
+' pip install -r .\requirements.txt'
+
+{in case error occured that  'cannot be loaded because running scripts is disabled on this system.'
+To fix follow the steps:-
+
+1.Run Microsoft Powershell as 'Run as administrator'
+2.paste:  Set-ExecutionPolicy -ExecutionPolicy RemoteSigned       
+(used remote signed  because its a bit more safe than unrestricted. It allows mostly local files to run)
+3.run and type 'Y' 
+now try activating the virtual environment, It will most probably run}
+
+
+***To initialize***
+-Run 'main.py' 
+-Just say 'Iris'(Its not very accurate, It may take few attempts for it to reply), It will reply with a 'yes'.
+-You may ask her to:
+    1.open youtube
+    2.open instagram
+    3.you can add custom playlist at 'songplaylist.py'(Instruction given there)
+    4.search any youtube channel(just say the channel name at last)
+    5.open/search in google
+
+
+***To finish program,say 'break'***
+
+***Important points***
+1.Terminal shows 'listening' and 'loading' so please speak after a second when it shows 'listening'
+2.If continuous 'Error!' is showing,Please try to adjust mic and test it again
+3.Between two consecutive listening their is time difference of two and a half seconds
+
+
+
