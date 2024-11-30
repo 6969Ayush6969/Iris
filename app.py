@@ -132,4 +132,4 @@ def stop_iris():
         return render_template('index.html') 
     return render_template('index.html')  
 
-app.run(debug=False, Threading=True)
+app.run(debug=False, threaded=True)
