@@ -7,6 +7,7 @@ from chatbot import generate_reply
 from flask import Flask,render_template,request,jsonify
 import threading
 from concurrent.futures import ThreadPoolExecutor
+import os 
 
 # Initialize the recognizer
 r = sr.Recognizer()
