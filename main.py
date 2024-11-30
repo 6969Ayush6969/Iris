@@ -6,6 +6,7 @@ from song_playlist import playlists, songs
 from chatbot import generate_reply
 from flask import Flask,render_template,request,jsonify
 import threading
+from concurrent.futures import ThreadPoolExecutor
 
 # Initialize the recognizer
 r = sr.Recognizer()
@@ -36,6 +37,7 @@ def work(text):
                 webbrowser.open(f'https://www.google.com/search?q={AtT2}')
             except Exception as e:
                 print(e)
+                return None
         else:
             webbrowser.open('https://www.google.com')
     elif 'youtube' in text.lower():
@@ -47,6 +49,7 @@ def work(text):
                 webbrowser.open(f'https://www.youtube.com/results?search_query={AtT2}')
             except Exception as e:
                 print(e)
+                return None
         else:
             webbrowser.open('https://www.youtube.com')
     elif 'instagram' in text.lower():
@@ -61,6 +64,7 @@ def work(text):
                         webbrowser.open(playlists[elem])
             except Exception as e:
                 print(e)
+                return None
         elif 'song' in text.lower():
             speak('Which song?')
             try:
@@ -72,6 +76,7 @@ def work(text):
                     webbrowser.open(f'https://www.youtube.com/results?search_query={AtT2}')
             except Exception as e:
                 print(e)
+                return None
         else:
             return None
 app = Flask(__name__)
@@ -94,7 +99,8 @@ def iris():
                     response = generate_reply(AtT1)
                     speak(response)
         except Exception as e:
-             print('Error:', e)
+                 print('Error:', e)
+                 return None  
 
 @app.route('/iris', methods=['POST'])
 def start_iris():
@@ -116,4 +122,4 @@ def stop_iris():
         return render_template('index.html') 
     return render_template('index.html')  
 
-app.run(debug=True)
+app.run(debug=False, threaded=True)
