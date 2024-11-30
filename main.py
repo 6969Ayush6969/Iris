@@ -10,15 +10,20 @@ from concurrent.futures import ThreadPoolExecutor
 
 # Initialize the recognizer
 r = sr.Recognizer()
-def listen():
-        with sr.Microphone() as source:
-            print('listening...')
-            r.pause_threshold = 1
-            audio = r.listen(source)
-            print('Loading...')
+def listen(callback):
+    """Non-blocking listen function using threading"""
+    with sr.Microphone() as source:
+        print('Listening...')
+        r.pause_threshold = 1
+        audio = r.listen(source)
+        print('Processing...')
+    try:
         text_speech = r.recognize_google(audio)
         print(text_speech)
-        return text_speech
+        callback(text_speech)  
+    except Exception as e:
+        print(f"Error recognizing speech: {e}")
+        callback(None)  
 def speak(command):
     engine = pyttsx3.init()
     voices = engine.getProperty('voices')
