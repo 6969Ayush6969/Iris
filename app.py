@@ -22,9 +22,13 @@ def listen(callback):
         text_speech = r.recognize_google(audio)
         print(text_speech)
         callback(text_speech)  
+    except sr.UnknownValueError:
+        return None
+    except sr.RequestError:
+        return None
     except Exception as e:
         print(f"Error recognizing speech: {e}")
-        callback(None)  
+        return None
 def speak(command):
     engine = pyttsx3.init()
     voices = engine.getProperty('voices')
