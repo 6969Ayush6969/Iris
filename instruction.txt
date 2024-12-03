@@ -13,7 +13,7 @@ now try activating the virtual environment, It will most probably run}
 
 
 ***To initialize***
--Run 'main.py' 
+-Run 'app.py' 
 -Just say 'Iris'(Its not very accurate, It may take few attempts for it to reply), It will reply with a 'yes'.
 -You may ask her to:
     1.open youtube
