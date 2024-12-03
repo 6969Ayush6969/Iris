@@ -1,34 +1,30 @@
-
 import speech_recognition as sr #SpeechRecognition module
 import pyttsx3
 import webbrowser
 from song_playlist import playlists, songs
-from chatbot import generate_reply
-from flask import Flask,render_template,request,jsonify
+from flask import Flask,render_template
 import threading
-from concurrent.futures import ThreadPoolExecutor
-import os 
+import google.generativeai as genai
+
+
+genai.configure(api_key="Your-GOOGLE-API-KEY") #removes my API key due to security reasons in my public repo
+
+def generate_reply(user_input):
+    model = genai.GenerativeModel("gemini-1.5-flash")
+    response = model.generate_content(user_input)
+    return response.text
 
 # Initialize the recognizer
 r = sr.Recognizer()
-def listen(callback):
-    """Non-blocking listen function using threading"""
-    with sr.Microphone() as source:
-        print('Listening...')
-        r.pause_threshold = 1
-        audio = r.listen(source)
-        print('Processing...')
-    try:
+def listen():
+        with sr.Microphone() as source:
+            print('listening...')
+            r.pause_threshold = 1
+            audio = r.listen(source)
+            print('Loading...')
         text_speech = r.recognize_google(audio)
         print(text_speech)
-        callback(text_speech)  
-    except sr.UnknownValueError:
-        return None
-    except sr.RequestError:
-        return None
-    except Exception as e:
-        print(f"Error recognizing speech: {e}")
-        return None
+        return text_speech
 def speak(command):
     engine = pyttsx3.init()
     voices = engine.getProperty('voices')
@@ -47,7 +43,6 @@ def work(text):
                 webbrowser.open(f'https://www.google.com/search?q={AtT2}')
             except Exception as e:
                 print(e)
-                return None
         else:
             webbrowser.open('https://www.google.com')
     elif 'youtube' in text.lower():
@@ -59,7 +54,6 @@ def work(text):
                 webbrowser.open(f'https://www.youtube.com/results?search_query={AtT2}')
             except Exception as e:
                 print(e)
-                return None
         else:
             webbrowser.open('https://www.youtube.com')
     elif 'instagram' in text.lower():
@@ -74,7 +68,6 @@ def work(text):
                         webbrowser.open(playlists[elem])
             except Exception as e:
                 print(e)
-                return None
         elif 'song' in text.lower():
             speak('Which song?')
             try:
@@ -86,9 +79,8 @@ def work(text):
                     webbrowser.open(f'https://www.youtube.com/results?search_query={AtT2}')
             except Exception as e:
                 print(e)
-                return None
-        else:
-            return None
+    else:
+        return False
 app = Flask(__name__)
 
 running=False
@@ -105,12 +97,12 @@ def iris():
                 speak('Yes, how may I help you?')
                 AtT1 = listen()
                 w = work(AtT1)
-                if w is None:
+                print(w)
+                if w is False:
                     response = generate_reply(AtT1)
                     speak(response)
         except Exception as e:
-                 print('Error:', e)
-                 return None  
+             print('Error:', e)
 
 @app.route('/iris', methods=['POST'])
 def start_iris():
@@ -132,4 +124,4 @@ def stop_iris():
         return render_template('index.html') 
     return render_template('index.html')  
 
-app.run(debug=False, threaded=True)
+app.run(debug=True)
